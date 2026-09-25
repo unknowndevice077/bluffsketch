@@ -1,0 +1,27 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    environment:
+      PORT: 3001
+      CLIENT_ORIGIN: http://localhost:8080
+      LOG_LEVEL: info
+    # Players only ever talk to nginx (8080), which proxies /socket.io here.
+    # Bound to localhost so the raw server isn't exposed to your network or a tunnel.
+    ports:
+      - "127.0.0.1:3001:3001"
+    restart: unless-stopped
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+      args:
+        # Empty = talk to the server through nginx's /socket.io proxy.
+        VITE_SERVER_URL: ""
+    ports:
+      - "8080:80"
+    depends_on:
+      - server
+    restart: unless-stopped

@@ -1,0 +1,20 @@
+# Render blueprint: one free web service running the all-in-one image
+# (game server + website on the same URL). Deploy: Render dashboard →
+# New → Blueprint → pick this repository.
+services:
+  - type: web
+    name: bluffsketch
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeploy: true
+    # Rooms live in memory, so this must stay a single instance.
+    numInstances: 1
+    envVars:
+      # Website and socket share one origin, so CORS is never involved.
+      - key: CLIENT_ORIGIN
+        value: "*"
+      - key: LOG_LEVEL
+        value: info

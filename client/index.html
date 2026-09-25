@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Bluff Sketch: everyone draws the secret word, except the Faker. Can you spot them?" />
+    <meta name="theme-color" content="#fdf8ec" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#181c2e" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Nunito:wght@400;600;700;800;900&family=Patrick+Hand&display=swap"
+      rel="stylesheet"
+    />
+    <title>Bluff Sketch</title>
+    <script>
+      // Apply the saved theme before first paint to avoid a light flash in dark mode.
+      try {
+        var prefs = JSON.parse(localStorage.getItem('bluffsketch:prefs') || '{}').state || {};
+        var dark = prefs.theme === 'dark' || (prefs.theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+        if (dark) document.documentElement.classList.add('dark');
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Bluff Sketch needs JavaScript to run.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

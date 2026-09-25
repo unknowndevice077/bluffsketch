@@ -1,0 +1,30 @@
+{
+  "name": "bluffsketch",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bluff Sketch - a real-time multiplayer drawing-and-bluffing party game",
+  "type": "module",
+  "workspaces": [
+    "shared",
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "postinstall": "npm run build -w @bluffsketch/shared",
+    "dev": "npm run build -w @bluffsketch/shared && concurrently -k -n shared,server,client -c magenta,blue,green \"npm:dev:shared\" \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:shared": "npm run dev -w @bluffsketch/shared",
+    "dev:server": "npm run dev -w @bluffsketch/server",
+    "dev:client": "npm run dev -w @bluffsketch/client",
+    "build": "npm run build -w @bluffsketch/shared && npm run build -w @bluffsketch/server && npm run build -w @bluffsketch/client",
+    "typecheck": "npm run build -w @bluffsketch/shared && npm run typecheck -w @bluffsketch/server && npm run typecheck -w @bluffsketch/client",
+    "start": "npm run start -w @bluffsketch/server",
+    "simulate": "npm run simulate -w @bluffsketch/server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
