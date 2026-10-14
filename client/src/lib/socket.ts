@@ -8,6 +8,8 @@ const SERVER_URL = import.meta.env.VITE_SERVER_URL?.trim();
 const options = {
   autoConnect: false,
   transports: ['websocket', 'polling'],
+  // Fall back to HTTP polling on networks that block WebSockets instead of never connecting.
+  tryAllTransports: true,
   reconnectionDelay: 500,
   reconnectionDelayMax: 4_000,
 };
