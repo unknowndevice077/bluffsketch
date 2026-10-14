@@ -122,6 +122,10 @@ Everything is synthesised live with the Web Audio API (`client/src/lib/audio/`).
 | `SERVE_CLIENT_DIR` | server | empty | Serve a built client from the same process |
 | `VITE_SERVER_URL` | client (build time) | empty | Server URL; empty = same origin |
 | `DEV_SERVER_TARGET` | client (dev) | `http://localhost:3001` | Vite proxy target |
+| `TRUST_PROXY` | server | `false` | `true` behind Render or Nginx, so per-IP limits see real IPs |
+| `BUG_REPORT_GITHUB_REPO` | server | none | `owner/repo` that receives in-game bug reports as issues (keep it private) |
+| `BUG_REPORT_GITHUB_TOKEN` | server | none | Fine-grained token with Issues: read and write on that repo only |
+| `BUG_REPORT_DISCORD_WEBHOOK` | server | none | Discord channel webhook for bug reports |
 
 See `.env.example`. The server reads `server/.env`; Vite reads `client/.env`.
 
@@ -142,6 +146,17 @@ export const SCORING = {
 ```
 
 Guess matching (`shared/src/fuzzy.ts`) is case-insensitive, trims whitespace, ignores plurals and allows a Levenshtein distance of ≤ 1. Answers of three letters or fewer must match exactly, otherwise "cat" would also accept "car", "hat" and "bat".
+
+## Bug reports
+
+Players can send a bug report from inside the game (⚙️ settings, the home screen, and the error screen). The form asks what happened, an optional email or Discord handle for a reply, and attaches the room code, game phase, player count, screen size, browser and the last few errors the page logged. Players see exactly what's attached before sending. No IP address is forwarded.
+
+The free Render plan keeps no files between restarts, so reports aren't stored on the server. Each one is written to the server log and forwarded to whichever of these you configure:
+
+- **GitHub issues:** set `BUG_REPORT_GITHUB_REPO` (`owner/repo`) and `BUG_REPORT_GITHUB_TOKEN`, a [fine-grained token](https://github.com/settings/personal-access-tokens/new) with **Issues: Read and write** on that one repository. Use a **private** repo, since players may leave contact details. Issues are labelled `bug report` plus the category.
+- **Discord:** set `BUG_REPORT_DISCORD_WEBHOOK` to a channel webhook URL (Channel settings → Integrations → Webhooks). Mentions are disabled.
+
+With neither set, the full report is still in the server log. Limits: 5 reports per IP per 15 minutes and 60 per hour overall; a hidden honeypot field drops bot submissions.
 
 ## Adding words
 

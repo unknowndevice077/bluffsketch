@@ -12,6 +12,7 @@ import { useDraw } from '../store/drawStore';
 import { useGame, type FatalKind } from '../store/gameStore';
 import { strokeModel } from '../store/strokeModel';
 import { hintServerTime, syncClock } from './clock';
+import { noteError } from './errorLog';
 import { clearSession, rejoinCandidates, saveSession } from './session';
 import { ACK_TIMEOUT_MS, socket } from './socket';
 import { sound } from './sound';
@@ -215,8 +216,12 @@ export function initNetwork(): void {
   });
 
   socket.on('disconnect', (reason) => {
-    if (reason !== 'io client disconnect') game().setConnection('reconnecting');
+    if (reason !== 'io client disconnect') {
+      noteError(`Disconnected: ${reason}`);
+      game().setConnection('reconnecting');
+    }
   });
+  socket.on('connect_error', (err) => noteError(`Connection error: ${err.message}`));
   socket.io.on('reconnect_attempt', () => game().setConnection('reconnecting'));
 
   socket.on('room:state', (state) => {

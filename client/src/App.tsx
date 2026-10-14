@@ -1,6 +1,7 @@
 import { MotionConfig, motion } from 'framer-motion';
 import type { ReactElement } from 'react';
 import type { Phase } from '@bluffsketch/shared';
+import { BugReportDialog } from './components/BugReportDialog';
 import { ConnectionBanner } from './components/ConnectionBanner';
 import { LiveAnnouncer } from './components/LiveAnnouncer';
 import { Toasts } from './components/Toasts';
@@ -85,6 +86,7 @@ export function App() {
       <Toasts />
       <ConnectionBanner />
       <LiveAnnouncer />
+      <BugReportDialog />
     </MotionConfig>
   );
 }

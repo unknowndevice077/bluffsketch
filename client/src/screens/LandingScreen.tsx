@@ -14,6 +14,7 @@ import { cn } from '../lib/cn';
 import { createRoom, joinRoom, listPublicRooms } from '../lib/net';
 import { loadProfile, saveProfile } from '../lib/session';
 import { sound } from '../lib/sound';
+import { useBugReport } from '../components/BugReportDialog';
 import { useGame } from '../store/gameStore';
 
 const randomAvatar = (): AvatarId => AVATAR_IDS[Math.floor(Math.random() * AVATAR_IDS.length)];
@@ -196,9 +197,14 @@ export function LandingScreen() {
             )}
           </div>
 
-          <button type="button" className="btn btn-ghost mt-auto" onClick={() => setHowOpen(true)}>
-            ❓ How to play
-          </button>
+          <div className="mt-auto flex gap-2">
+            <button type="button" className="btn btn-ghost flex-1" onClick={() => setHowOpen(true)}>
+              ❓ How to play
+            </button>
+            <button type="button" className="btn btn-ghost" onClick={() => useBugReport.getState().show()}>
+              🐞 Report a bug
+            </button>
+          </div>
         </motion.section>
       </div>
       <HowToPlay open={howOpen} onClose={() => setHowOpen(false)} />

@@ -4,6 +4,7 @@ import { leaveRoom } from '../lib/net';
 import { sound } from '../lib/sound';
 import { useGame } from '../store/gameStore';
 import { usePrefs, type MotionPref, type ThemePref } from '../store/prefsStore';
+import { useBugReport } from './BugReportDialog';
 import { Logo } from './Logo';
 import { Segmented } from './ui/Controls';
 
@@ -100,6 +101,16 @@ function PrefsPanel({ onClose }: { onClose: () => void }) {
           { value: 'system', label: 'Auto' },
         ]}
       />
+      <button
+        type="button"
+        className="btn btn-ghost w-full !text-lg"
+        onClick={() => {
+          onClose();
+          useBugReport.getState().show();
+        }}
+      >
+        🐞 Report a bug
+      </button>
       <button type="button" className="btn btn-ghost w-full" onClick={onClose}>
         Done
       </button>

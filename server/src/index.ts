@@ -3,6 +3,7 @@ import { createServer } from 'node:http';
 import path from 'node:path';
 import express from 'express';
 import { Server } from 'socket.io';
+import { bugReportRoutes } from './bugReports.js';
 import { config } from './config.js';
 import { RoomManager } from './room/RoomManager.js';
 import type { IO } from './room/types.js';
@@ -12,6 +13,7 @@ import { WORD_PAIRS } from './game/wordBank.js';
 
 const app = express();
 app.disable('x-powered-by');
+if (config.trustProxy) app.set('trust proxy', 1);
 
 const httpServer = createServer(app);
 const io: IO = new Server(httpServer, {
@@ -28,6 +30,8 @@ manager.startCleanup();
 app.get('/health', (_req, res) => {
   res.json({ ok: true, rooms: manager.size, uptimeSec: Math.round(process.uptime()) });
 });
+
+app.use(bugReportRoutes({ game: 'Bluff Sketch', allowedOrigins: config.clientOrigins, ...config.bugReports }));
 
 const clientDir = config.serveClientDir ? path.resolve(config.serveClientDir) : '';
 if (clientDir && existsSync(path.join(clientDir, 'index.html'))) {

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { goHome } from '../lib/net';
+import { useBugReport } from '../components/BugReportDialog';
 import type { FatalError, FatalKind } from '../store/gameStore';
 
 const COPY: Record<FatalKind, { emoji: string; title: string }> = {
@@ -29,6 +30,9 @@ export function StatusScreen({ error }: { error: FatalError }) {
         <p className="mt-2 text-lg">{error.message}</p>
         <button type="button" className="btn btn-primary mt-5 w-full !text-2xl" onClick={goHome}>
           Back to the start
+        </button>
+        <button type="button" className="btn btn-ghost mt-2 w-full" onClick={() => useBugReport.getState().show()}>
+          🐞 Something wrong? Report it
         </button>
       </motion.div>
     </div>

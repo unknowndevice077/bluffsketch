@@ -1,4 +1,5 @@
 export * from './avatars.js';
+export * from './bugReport.js';
 export * from './categories.js';
 export * from './constants.js';
 export * from './events.js';

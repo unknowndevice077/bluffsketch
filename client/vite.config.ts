@@ -20,6 +20,7 @@ export default defineConfig(({ mode }) => {
       proxy: {
         // Same-origin in dev: lets phones on your LAN play via http://<your-ip>:5173.
         '/socket.io': { target: devServerTarget, ws: true, changeOrigin: true },
+        '/api': { target: devServerTarget, changeOrigin: true },
       },
     },
     build: {
